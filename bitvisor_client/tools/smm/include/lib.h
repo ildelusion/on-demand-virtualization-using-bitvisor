@@ -1,0 +1,22 @@
+#ifndef _LIB_H_
+#define _LIB_H_
+
+/* printing */
+#define _p(_x) ((void *)(unsigned long)(_x))
+
+/* string and memory manipulation */
+int    memcmp(const void *cs, const void *ct, size_t count);
+void  *memcpy(void *dest, const void *src, size_t count);
+int    strncmp(const char *cs, const char *ct, size_t count);
+int    strcmp(const char *cs, const char *ct);
+char  *strcpy(char *dest, const char *src);
+char  *strncpy(char *dest, const char *src, size_t count);
+void  *memset(void *s,int c, size_t count);
+size_t strnlen(const char *s, size_t count);
+size_t strlen(const char *s);
+char  *strchr(const char *s, int c);
+char  *strrchr(const char *s, int c);
+char  *strstr(const char *s1, const char *s2);
+char * strcat(char * dest, const char * src);
+char  *strdup(const char *s);
+#endif /* _LIB_H_ */

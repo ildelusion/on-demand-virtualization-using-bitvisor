@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>    /* errno */
+#include <sys/mman.h> /* mmap(), munmap(), PROT_READ, PROT_WRITE, MAP_SHARED */
+//#include <xenctrl.h>
+#include "libSMM.h"
+#include <smm_types.h>
+#include <sys/syscall.h> 
+#include <unistd.h> 
+
+#include <sys/time.h>
+#include <time.h>
+#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+
+	int xc_fd;
+	smi_request_t *req;
+	uint8_t eos_data;
+	iopl(3);
+	
+	/* Clear WAKE IRQ */
+
+	outb(PMIO_WAKEIRQ,PMIO_COMMAND);
+	eos_data = inb (PMIO_DATA);
+	printf("WAKEIRQ: %x\n", eos_data); 
+
+	eos_data = inb (PMIO_DATA);
+	eos_data = 0;
+	outb(eos_data,PMIO_DATA );
+	eos_data = inb (PMIO_DATA);
+	printf("WAKEIRQ: %x\n", eos_data); 
+	
+	/* Enable Serial IRQ */
+	outb(PMIO_WAKEIRQ,PMIO_COMMAND);
+	if (argc == 1)
+	{
+		outb(PMIO_WAKESMI_SERI,PMIO_DATA );
+		eos_data = inb (0x3f8 + 0x1);
+		printf("Interrupt Enable: %x\n", eos_data); 
+		outb(1,0x3f8 + 0x2);
+		outb(0x5,0x3f8 + 0x1);
+
+
+	}
+	else 
+		outb(0x0,PMIO_DATA );
+	eos_data = inb (PMIO_DATA);
+	printf("WAKEIRQ: %x\n", eos_data); 
+	
+	xc_fd = xc_interface_open();
+
+	if (xc_fd < 0)
+	{
+		printf("Failed to open control interface\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	req = (smi_request_t *)xc_map_foreign_range(xc_fd, DOMID_SELF, 1024, PROT_WRITE | PROT_READ, SMM_ARGUMENT_ADDR/(4*1024));
+
+	req->command 					= CMD_ACCOUNT_VCPU;
+	if(req == NULL) { 
+		printf("Could not map memory area, errno: %d\n", errno); 
+		exit(EXIT_FAILURE); 
+	}
+	return 0;
+}

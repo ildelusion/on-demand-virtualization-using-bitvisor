@@ -1,0 +1,69 @@
+version 19-04-05 from bitvisor_190402
+128KB MU, background copy
+
+version 19-04-02 from bitvisor_190401
+16GB postcopy time measure, 128KB migration unit (MU)
+version 19-04-01 from bitvisor_190331
+16GB postcopy time measure
+
+version 19-03-31 from bitvisor_190324
+16GB postcopy migration optimization
+
+version 19-03-24 from bitvisor_181119
+16GB postcopy migration
+
+version 18-11-19 from bitvisor_181112
+sequential 1MB send implementation
+
+version 18-11-12 from bitvisor_181108
+print root cause of overhead
+
+version 18-11-08 from bitvisor_181104
+measure source of overhead
+from this version, you have to start postcopy first at client, do 'postcopy ready' at server later.
+tune mmhandler3 in drivers/net/pro1000.c
+I tried to change ippass into ip. But Assertion occured and ip has high overhead.(information from bitvisor summit) thx to wonsang kwak.
+
+
+bitvisor_181104 from bitvisor_181101
+on-demand migration using white list method
+Fix LWIP BUG. guest_is_transmitting is called when using LWIP.
+
+bitvisor_181101 from bitvisor_181015
+Send all memory using margin_send function
+SSH access success
+
+bitvisor_181015 from bitvisor_180930
+1MB unit migration
+postcopy sequential thread (not tested yet), YOU HAVE TO IMPLEMENT IT !!!! Complete poscopy_sequential_thread function!
+	- ip/echo-client.c: thread_new(seq_transmit_start, NULL, VMM_STACKSIZE);
+
+bitvisor_180910
+with bitvisor_180731 of server
+request based (on-demand based) copy migration. success using tcp_output api.
+
+bitvisor_180726 (with bitvisor_180731 of com7, a.k.a. server)
+only on-demand page migration
+background copy have to be implemented using thread in ip/echo-client.c
+16KB unit migration
+
+From bitvisor_180617
+New thread test in ip/echo-client.c
+
+Upgrade to lwip-2.0.0
+
+Erase LWIP debugging options
+ip/lwip-1.4.1/src/include/lwip/opt.h
+ip/lwip-1.4.1/src/include/lwip/debug.h
+
+Client-side
+Post-copy migration implementation start
+Modified / Added files
+core/Makefile
+core/vmmcall_postcopy_migration.c
+ip/echoctl.c
+ip/echo-client.c
+
+Post-copy migration
+1. Send CPU state
+3. Send memory state

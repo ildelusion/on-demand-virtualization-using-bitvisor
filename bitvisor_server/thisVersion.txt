@@ -1,0 +1,47 @@
+version 19-04-05 from bitvisor_190402
+128KB MU, background copy
+
+version 19-04-02 from bitvisor_190401
+16GB postcopy time measure, 128KB migration unit (MU)
+
+version 19-04-01 from bitvisor_190331
+16GB postcopy migration time measure
+
+version 19-03-31 from bitvisor_190324
+16GB postcopy optimization
+
+version 19-03-24 from bitvisor_181119
+16GB memory postcopy
+
+19-03-24 log
+1MB sequential postcopy success. virtio NIC card should be installed. Too large global variable in include/core/mmio.h. It overrides code or stack area.
+
+version 18-11-19 from bitvisor_181112
+sequential 1MB of client
+
+version 18-11-12 from bitvisor_181108
+print root cause of overhead.
+
+version 18-11-08
+from bitvisor_181015
+measure source of overhead
+you need to tune mmhandler3 of drivers/net/pro1000.c
+
+version 18-10-15
+from bitvisor_180930
+1MB migration unit
+LWIP BUG FIX - guest_is_transmitting is called in LWIP pro1000 driver
+
+from bitvisor_180731
+hypercall after CPU state recved to check CPU operation work well
+The hypercall print some strings to serial
+
+18-07-31 modified in 2018-09-29 matched to bitvisor_180910 of client
+tcp_output is applied to echo-server.c
+direct sending of small packet
+
+18-07-31
+from 180617
+
+sync postcopy
+vt_ept.c requests address which will be mapped

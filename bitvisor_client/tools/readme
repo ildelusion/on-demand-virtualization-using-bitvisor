@@ -1,0 +1,12 @@
+To devirtualize
+
+cd tools/devirt_kernel_module
+make
+sudo insmod devirt.ko
+
+
+To revirtualize
+
+cd tools/revirt_kernel_module
+make
+sudo insmod revirtModult.ko

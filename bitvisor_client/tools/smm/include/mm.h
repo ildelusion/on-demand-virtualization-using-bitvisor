@@ -1,0 +1,65 @@
+/* -*-  Mode:C; c-basic-offset:4; tab-width:4 -*-
+ *
+ * (C) 2003 - Rolf Neugebauer - Intel Research Cambridge
+ * Copyright (c) 2005, Keir A Fraser
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
+
+#ifndef _MM_H_
+#define _MM_H_
+
+#include "smiutil.h"
+
+
+#define  PAGE_SHIFT	12 
+#ifndef PAGE_SIZE
+#define PAGE_SIZE           (1L << PAGE_SHIFT)
+#endif
+
+#define PAGE_MASK           (~(PAGE_SIZE-1))
+
+#define  ALIGN_MASK(x,bits) ((x << bits) >> bits)
+
+void init_mm(void);
+u64 alloc_pages(int order);
+#define alloc_page()    alloc_pages(0)
+void free_pages(void *pointer, int order);
+#define free_page(p)    free_pages(p, 0)
+
+static __inline__ int get_order(unsigned long size)
+{
+    int order;
+    size = (size-1) >> PAGE_SHIFT;
+    for ( order = 0; size; order++ )
+        size >>= 1;
+    return order;
+}
+
+void fini_mm(void);
+
+void init_page_allocator(u64 min, u64 max);
+
+#define wbinvd() \
+    asm volatile ( "wbinvd" : : : "memory" )
+//#define barrier() \
+	asm volatile ("": : :"memory")
+
+#define PHYS_PFN(x)	((u64)(x) >> PAGE_SHIFT)
+#endif /* _MM_H_ */
