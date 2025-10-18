@@ -25,3 +25,6 @@ client send\
 
 ### at client
 ./postcopy_mig_start.sh
+
+# Special notes
+We use PXE booting in experiments. We needed DHCP, TFTP, and NFS servers. The details are in the papers above.
